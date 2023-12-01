@@ -55,7 +55,7 @@ def get_paths(O, distance):
     else:
         print('distance:', distance)
 
-def BestFirstSearch(S=note(name='A'), G=note(name='M')):
+def BestFirstSearch(S=note(name='A'), G=note(name='N')):
     Open = PriorityQueue()
     Closed = PriorityQueue()
     S.h = data[S.name][-1]

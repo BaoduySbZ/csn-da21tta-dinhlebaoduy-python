@@ -54,7 +54,7 @@ def get_paths(O, distance):
         get_paths(O.par, distance)
     else:
         print('distance:', distance)
-
+#THU NGHIEM
 def BestFirstSearch(S=note(name='A'), G=note(name='N')):
     Open = PriorityQueue()
     Closed = PriorityQueue()

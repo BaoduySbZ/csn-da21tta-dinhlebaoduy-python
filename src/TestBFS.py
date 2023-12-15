@@ -1,98 +1,89 @@
 from queue import PriorityQueue
-from collections import defaultdict
 
-data = defaultdict(list)
-data['Arad'] = ['Sibiu', 'Timisoara', 'Zerind', 366]
-data['Sibiu'] = ['Arad', 'Fagaras', 'Oradea', 'Rimimicu Vilcea', 253]
-data['Fagaras'] = ['Sibiu', 'Bucharest', 176]
-data['Zerind'] = ['Arad', 'Oradea', 374]
-data['Timisoara'] = ['Arad', 'Lugoj', 329]
-data['Lugoj'] = ['Timisoara', 'Mehadia', 244]
-data['Mehadia'] = ['Lugoj', 'Dobreta', 241]
-data['Dobreta'] = ['Mehadia', 'Craiova', 242]
-data['Craiova'] = ['Dobreta', 'Rimimicu Vilcea', 'Pitesti', 160]
-data['Rimimicu Vilcea'] = ['Craiova', 'Sibiu', 'Pitesti', 193]
-data['Pitesti'] = ['Rimimicu Vilcea', 'Craiova', 'Bucharest', 10]
-data['Bucharest'] = ['Giurgiu', 'Urziceni', 0]
-data['Urziceni'] = ['Bucharest', 'Vaslui', 'Hirsova', 80]
-data['Vaslui'] = ['Urziceni', 'Iasi', 199]
-data['Iasi'] = ['Vaslui', 'Neamt', 226]
-data['Neamt'] = ['Iasi', 234]
-data['Hirsova'] = ['Urziceni', 'Eforie', 151]
-data['Eforie'] = ['Hirsova', 161]
-data['Giurgiu'] = ['Bucharest', 77]
+def greedy_best_first_search(start, goal, heuristic):
+    open_set = PriorityQueue()
+    open_set.put((heuristic(start), start))
+    closed_set = set()
 
-class note:
-    def __init__(self, name, par=None, h=0):
-        self.name = name
-        self.par = par
-        self.h = h
+    while not open_set.empty():
+        current_node = open_set.get()[1]
 
-    def display(self):
-        print(self.name, self.h)
+        print(f'duyet: {current_node}, toa do: {heuristic(current_node)}')
 
-    def __lt__(self, other):
-        if other is None:
-            return False
-        return self.h < other.h
+        if current_node == goal:
+            return "Tim kiem thanh cong"
 
-    def __eq__(self, other):
-        if other is None:
-            return False
-        return self.name == other.name
+        closed_set.add(current_node)
 
-def equal(O, G):
-    if O.name == G.name:
-        return True
-    return False
+        for neighbor in get_neighbors(current_node):
+            if neighbor not in closed_set:
+                open_set.put((heuristic(neighbor), neighbor))
+                closed_set.add(neighbor)
 
-def checkInPriority(tmp, c):
-    if tmp is None:
-        return False
-    return tmp in c.queue
+    return "Tim kiem that bai"
 
-def get_paths(O, distance):
-    print(O.name, end=" ")
-    distance += O.h
-    if O.par is not None:
-        get_paths(O.par, distance)
-    else:
-        print('distance:', distance)
 
-# THU NGHIEM
-def GreedyBestFirstSearch(S=note(name='Arad'), G=note(name='Bucharest')):
-    Open = PriorityQueue()
-    Closed = PriorityQueue()
-    S.h = data[S.name][-1]
-    Open.put(S)
-    while True:
-        if Open.empty():
-            print('tim kiem that bai')
-            return
-        O = Open.get()
-        Closed.put(O)
-        print('duyet:', O.name, O.h)
-        if equal(O, G):
-            print('tim kiem thanh cong')
-            distance = 0
-            get_paths(O, distance)
-            return
+def heuristic(node):
+     # Example heuristic: distance to goal (assuming nodes are cities)
+     # You need to customize this based on your problem
 
-        i = 0
-        while i < len(data[O.name]) - 1:
-            name = data[O.name][i]
-            if i + 1 < len(data[name]):
-                h = data[name][-1]
-                tmp = note(name=name, h=h)
-                tmp.par = O
+    distances = {
+     # ... add distances for other cities ...
+     
+        'Arad': 366,
+        'Bucharest': 0,
+        'Craiova': 160,
+        'Dobreta': 242,
+        'Eforie': 161,
+        'Fagaras': 176,
+        'Giurgiu': 77,
+        'Hirsova': 151,
+        'Iasi': 226,
+        'Lugoj': 244,
+        'Mehadia': 241,
+        'Neamt': 234,
+        'Oradea': 380,
+        'Pitesti': 10,
+        'Rimimicu Vilcea': 193,
+        'Sibiu': 253,
+        'Timisoara': 329,
+        'Urziceni': 80,
+        'Vaslui': 199,
+        'Zerind': 374,
+    }
+    return distances[node]
 
-                ok1 = checkInPriority(tmp, Open)
-                ok2 = checkInPriority(tmp, Closed)
+def get_neighbors(node):
+    
+     # Example: Return neighbors of a node (assuming nodes are cities)
+     # You need to customize this based on your problem
 
-                if not ok1 and not ok2:
-                    Open.put(tmp)
-
-            i += 1
+    neighbors = {
+        'Arad': ['Sibiu', 'Timisoara', 'Zerind'],
+        'Sibiu': ['Arad', 'Fagaras', 'Oradea', 'Rimimicu Vilcea'],
+        'Fagaras': ['Sibiu', 'Bucharest'],
+        'Craiova': ['Dobreta', 'Rimimicu Vilcea', 'Pitesti'],
+        'Dobreta': ['Mehadia', 'Craiova'],
+        'Eforie': ['Hirsova'],
+        'Giurgiu': ['Bucharest'],
+        'Hirsova': ['Urziceni', 'Eforie'],
+        'Iasi': ['Vaslui', 'Neamt'],
+        'Lugoj': ['Timisoara', 'Mehadia'],
+        'Mehadia': ['Lugoj', 'Dobreta'],
+        'Neamt': ['Iasi'],
+        'Oradea': ['Zerind', 'Sibiu'],
+        'Pitesti': ['Rimimicu Vilcea', 'Craiova', 'Bucharest'],
+        'Rimimicu Vilcea': ['Craiova', 'Sibiu', 'Pitesti'],
+        'Timisoara': ['Arad', 'Lugoj'],
+        'Urziceni': ['Bucharest', 'Vaslui', 'Hirsova'],
+        'Vaslui': ['Urziceni', 'Iasi'],
+        'Zerind': ['Arad', 'Oradea'],
+        'Bucharest' : ['Fagaras', 'Pitesti', 'Giurgiu', 'Urziceni'],
+    }
+    return neighbors[node]
 
 # Test the code
-GreedyBestFirstSearch()
+start_node = 'Arad'
+goal_node = 'Bucharest'
+result = greedy_best_first_search(start_node, goal_node, heuristic)
+print(result)

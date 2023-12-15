@@ -8,8 +8,10 @@ def greedy_best_first_search(start, goal, heuristic):
     while not open_set.empty():
         current_node = open_set.get()[1]
 
+        print(f'duyet: {current_node}, toa do: {heuristic(current_node)}')
+
         if current_node == goal:
-            return "Path found"
+            return "Tim kiem thanh cong"
 
         closed_set.add(current_node)
 
@@ -18,12 +20,16 @@ def greedy_best_first_search(start, goal, heuristic):
                 open_set.put((heuristic(neighbor), neighbor))
                 closed_set.add(neighbor)
 
-    return "No path found"
+    return "Tim kiem that bai"
+
 
 def heuristic(node):
-    # Example heuristic: distance to goal (assuming nodes are cities)
-    # You need to customize this based on your problem
+     # Example heuristic: distance to goal (assuming nodes are cities)
+     # You need to customize this based on your problem
+
     distances = {
+     # ... add distances for other cities ...
+     
         'Arad': 366,
         'Bucharest': 0,
         'Craiova': 160,
@@ -44,23 +50,39 @@ def heuristic(node):
         'Urziceni': 80,
         'Vaslui': 199,
         'Zerind': 374,
-        # ... add distances for other cities ...
     }
     return distances[node]
 
 def get_neighbors(node):
-    # Example: Return neighbors of a node (assuming nodes are cities)
-    # You need to customize this based on your problem
+    
+     # Example: Return neighbors of a node (assuming nodes are cities)
+     # You need to customize this based on your problem
+
     neighbors = {
         'Arad': ['Sibiu', 'Timisoara', 'Zerind'],
         'Sibiu': ['Arad', 'Fagaras', 'Oradea', 'Rimimicu Vilcea'],
-        'Fagaras':['Sibiu', 'Bucharest'],
-        
-        # ... add neighbors for other cities ...
+        'Fagaras': ['Sibiu', 'Bucharest'],
+        'Craiova': ['Dobreta', 'Rimimicu Vilcea', 'Pitesti'],
+        'Dobreta': ['Mehadia', 'Craiova'],
+        'Eforie': ['Hirsova'],
+        'Giurgiu': ['Bucharest'],
+        'Hirsova': ['Urziceni', 'Eforie'],
+        'Iasi': ['Vaslui', 'Neamt'],
+        'Lugoj': ['Timisoara', 'Mehadia'],
+        'Mehadia': ['Lugoj', 'Dobreta'],
+        'Neamt': ['Iasi'],
+        'Oradea': ['Zerind', 'Sibiu'],
+        'Pitesti': ['Rimimicu Vilcea', 'Craiova', 'Bucharest'],
+        'Rimimicu Vilcea': ['Craiova', 'Sibiu', 'Pitesti'],
+        'Timisoara': ['Arad', 'Lugoj'],
+        'Urziceni': ['Bucharest', 'Vaslui', 'Hirsova'],
+        'Vaslui': ['Urziceni', 'Iasi'],
+        'Zerind': ['Arad', 'Oradea'],
+        'Bucharest' : ['Fagaras', 'Pitesti', 'Giurgiu', 'Urziceni'],
     }
     return neighbors[node]
 
-# Example usage
+# Test the code
 start_node = 'Arad'
 goal_node = 'Bucharest'
 result = greedy_best_first_search(start_node, goal_node, heuristic)

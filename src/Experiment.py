@@ -1,14 +1,14 @@
 from queue import PriorityQueue
 
-def greedy_best_first_search(start, goal, heuristic):
+def a_star_search(start, goal, heuristic_costs, actual_costs):
     open_set = PriorityQueue()
-    open_set.put((heuristic(start), start))
+    open_set.put((heuristic_costs[start] + actual_costs[start], start, actual_costs[start]))
     closed_set = set()
 
     while not open_set.empty():
         current_node = open_set.get()[1]
 
-        print(f'duyet: {current_node}, toa do: {heuristic(current_node)}')
+        print(f'duyet: {current_node}, toa do: {actual_costs[current_node] + heuristic_costs[current_node]}')
 
         if current_node == goal:
             return "Tim kiem thanh cong"
@@ -16,42 +16,13 @@ def greedy_best_first_search(start, goal, heuristic):
         closed_set.add(current_node)
 
         for neighbor in get_neighbors(current_node):
+            new_cost = actual_costs[current_node] + 1  # Assuming cost from one node to its neighbor is 1
+
             if neighbor not in closed_set:
-                open_set.put((heuristic(neighbor), neighbor))
+                open_set.put((new_cost + heuristic_costs[neighbor], neighbor, new_cost))
                 closed_set.add(neighbor)
 
     return "Tim kiem that bai"
-
-
-def heuristic(node):
-     # Example heuristic: distance to goal (assuming nodes are cities)
-     # You need to customize this based on your problem
-
-    distances = {
-     # ... add distances for other cities ...
-     
-        'Arad': 366,
-        'Bucharest': 0,
-        'Craiova': 160,
-        'Dobreta': 242,
-        'Eforie': 161,
-        'Fagaras': 176,
-        'Giurgiu': 77,
-        'Hirsova': 151,
-        'Iasi': 226,
-        'Lugoj': 244,
-        'Mehadia': 241,
-        'Neamt': 234,
-        'Oradea': 380,
-        'Pitesti': 10,
-        'Rimimicu Vilcea': 193,
-        'Sibiu': 253,
-        'Timisoara': 329,
-        'Urziceni': 80,
-        'Vaslui': 199,
-        'Zerind': 374,
-    }
-    return distances[node]
 
 def get_neighbors(node):
     
@@ -82,8 +53,58 @@ def get_neighbors(node):
     }
     return neighbors[node]
 
-# Test the code
+# Ước lượng chi phí từ Arad đến Bucharest (heuristic)
+heuristic_costs = {
+    # ... add distances for other cities ...
+    
+    'Arad': 366,
+    'Bucharest': 0,
+    'Craiova': 160,
+    'Dobreta': 242,
+    'Eforie': 161,
+    'Fagaras': 176,
+    'Giurgiu': 77,
+    'Hirsova': 151,
+    'Iasi': 226,
+    'Lugoj': 244,
+    'Mehadia': 241,
+    'Neamt': 234,
+    'Oradea': 380,
+    'Pitesti': 10,
+    'Rimimicu Vilcea': 193,
+    'Sibiu': 253,
+    'Timisoara': 329,
+    'Urziceni': 80,
+    'Vaslui': 199,
+    'Zerind': 374,
+}
+
+# Chi phí thực tế từ Arad đến các điểm khác (actual cost)
+actual_costs = {
+    # ... add distances for other cities ...
+    'Arad': 0,
+    'Sibiu': 140,
+    'Timisoara': 118,
+    'Zerind': 75,
+    'Oradea': 146,
+    'Fagaras': 239,
+    'Rimimicu Vilcea': 220,
+    'Pitesti': 317,
+    'Craiova': 292,
+    'Bucharest': 418,
+    'Giurgiu': 90,
+    'Urziceni': 414,
+    'Hirsova': 151,
+    'Eforie': 161,
+    'Vaslui': 509,
+    'Iasi': 406,
+    'Neamt': 563,
+    'Lugoj': 229,
+    'Mehadia': 299,
+    'Dobreta': 242,
+}
+
 start_node = 'Arad'
 goal_node = 'Bucharest'
-result = greedy_best_first_search(start_node, goal_node, heuristic)
+result = a_star_search(start_node, goal_node, heuristic_costs, actual_costs)
 print(result)

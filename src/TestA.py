@@ -57,7 +57,7 @@ def get_paths(O, distance=0):  # Thêm tham số mặc định cho distance
     else:
         print('distance:', distance)
 
-def AStar(S=note(name='A'), G=note(name='N')):
+def AStar(S=note(name='A'), G=note(name='M')):
     Open = PriorityQueue()
     Closed = PriorityQueue()
     S.h = data[S.name][-1]

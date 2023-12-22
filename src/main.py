@@ -8,10 +8,10 @@ def greedy_best_first_search(start, goal, heuristic):
     while not open_set.empty():
         current_node = open_set.get()[1]
 
-        print(f'duyet: {current_node}, toa do: {heuristic(current_node)}')
+        print(f'Duyệt: {current_node}, Tọa Độ: {heuristic(current_node)}')
 
         if current_node == goal:
-            return "Tim kiem thanh cong"
+            return "Tìm kiếm thành công"
 
         closed_set.add(current_node)
 
@@ -20,7 +20,7 @@ def greedy_best_first_search(start, goal, heuristic):
                 open_set.put((heuristic(neighbor), neighbor))
                 closed_set.add(neighbor)
 
-    return "Tim kiem that bai"
+    return "Tìm kiếm thất bại"
 
 
 def heuristic(node):
@@ -28,7 +28,7 @@ def heuristic(node):
      # chúng ta cần tùy chỉnh điều này dựa trên mọi vấn đề đã đặt ra
 
     distances = {
-     # ... thêm khoảng cách cho các thành phố khác ...
+     # thêm khoảng cách cho các thành phố khác
      
         'Arad': 366,
         'Bucharest': 0,
@@ -55,8 +55,6 @@ def heuristic(node):
 
 def get_neighbors(node):
     
-     # Example: Return neighbors of a node (assuming nodes are cities)
-     # You need to customize this based on your problem
 
     neighbors = {
         'Arad': ['Sibiu', 'Timisoara', 'Zerind'],
@@ -82,7 +80,7 @@ def get_neighbors(node):
     }
     return neighbors[node]
 
-# Test the code
+
 start_node = 'Arad'
 goal_node = 'Bucharest'
 result = greedy_best_first_search(start_node, goal_node, heuristic)

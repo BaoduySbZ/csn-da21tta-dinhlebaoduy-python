@@ -24,12 +24,9 @@ def greedy_best_first_search(start, goal, heuristic):
 
 
 def heuristic(node):
-     # Example heuristic: distance to goal (assuming nodes are cities)
-     # You need to customize this based on your problem
-
+    
     distances = {
-     # ... add distances for other cities ...
-     
+  
         'Arad': 366,
         'Bucharest': 0,
         'Craiova': 160,
@@ -54,9 +51,6 @@ def heuristic(node):
     return distances[node]
 
 def get_neighbors(node):
-    
-     # Example: Return neighbors of a node (assuming nodes are cities)
-     # You need to customize this based on your problem
 
     neighbors = {
         'Arad': ['Sibiu', 'Timisoara', 'Zerind'],
@@ -82,7 +76,6 @@ def get_neighbors(node):
     }
     return neighbors[node]
 
-# Test the code
 start_node = 'Arad'
 goal_node = 'Bucharest'
 result = greedy_best_first_search(start_node, goal_node, heuristic)

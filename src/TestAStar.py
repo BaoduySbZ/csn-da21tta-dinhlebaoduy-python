@@ -8,27 +8,25 @@ def a_star_search(start, goal, heuristic_costs, actual_costs):
     while not open_set.empty():
         current_node = open_set.get()[1]
 
-        print(f'duyet: {current_node}, toa do: {actual_costs[current_node] + heuristic_costs[current_node]}')
+        print(f'Duyệt: {current_node}, Tọa độ: {actual_costs[current_node] + heuristic_costs[current_node]}')
 
         if current_node == goal:
-            return "Tim kiem thanh cong"
+            return "Tìm kiếm thành công"
 
         closed_set.add(current_node)
 
         for neighbor in get_neighbors(current_node):
-            new_cost = actual_costs[current_node] + 1  # Assuming cost from one node to its neighbor is 1
+            new_cost = actual_costs[current_node] + 1  # Giả sử chi phí từ một nút đến nút lân cận của nó là 1
 
             if neighbor not in closed_set:
                 open_set.put((new_cost + heuristic_costs[neighbor], neighbor, new_cost))
                 closed_set.add(neighbor)
 
-    return "Tim kiem that bai"
+    return "Tìm kiếm thất bại"
 
 def get_neighbors(node):
     
-     # Example: Return neighbors of a node (assuming nodes are cities)
-     # You need to customize this based on your problem
-
+ 
     neighbors = {
         'Arad': ['Sibiu', 'Timisoara', 'Zerind'],
         'Sibiu': ['Arad', 'Fagaras', 'Oradea', 'Rimimicu Vilcea'],
@@ -53,9 +51,9 @@ def get_neighbors(node):
     }
     return neighbors[node]
 
-# Ước lượng chi phí từ Arad đến Bucharest (heuristic)
+
 heuristic_costs = {
-    # ... add distances for other cities ...
+   
     
     'Arad': 366,
     'Bucharest': 0,
@@ -79,9 +77,10 @@ heuristic_costs = {
     'Zerind': 374,
 }
 
-# Chi phí thực tế từ Arad đến các điểm khác (actual cost)
+
 actual_costs = {
-    # ... add distances for other cities ...
+
+ 
     'Arad': 0,
     'Sibiu': 140,
     'Timisoara': 118,

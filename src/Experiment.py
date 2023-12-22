@@ -8,10 +8,10 @@ def a_star_search(start, goal, heuristic_costs, actual_costs):
     while not open_set.empty():
         current_node = open_set.get()[1]
 
-        print(f'duyet: {current_node}, toa do: {actual_costs[current_node] + heuristic_costs[current_node]}')
+        print(f'Duyệt: {current_node}, Tọa độ: {actual_costs[current_node] + heuristic_costs[current_node]}')
 
         if current_node == goal:
-            return "Tim kiem thanh cong"
+            return "Tìm kiếm thành công"
 
         closed_set.add(current_node)
 

@@ -1,110 +1,105 @@
 from queue import PriorityQueue
+from collections import defaultdict
 
-def a_star_search(start, goal, heuristic_costs, actual_costs):
-    open_set = PriorityQueue()
-    open_set.put((heuristic_costs[start] + actual_costs[start], start, actual_costs[start]))
-    closed_set = set()
+#khởi tạo một data set
+#dùng hàm .extend() để thêm nhiều phần tử vào một danh sách.
+data = defaultdict(list)
+data['arad'].extend(['sibiu', 140, 'timisoara', 118, 'zerind', 75, 366]) 
+data['sibiu'].extend(['arad', 140, 'fagaras', 99, 'oradea', 151, 'rimimicu vilcea', 80, 253]) 
+data['fagaras'].extend(['sibiu', 99, 'bucharest', 211, 176]) 
+data['craiova'].extend(['dobreta', 120, 'rimimicu Vilcea', 146, 'pitesti', 138, 160]) 
+data['dobreta'].extend(['mehadia', 75, 'craiova', 120, 242]) 
+data['eforie'].extend(['hirsova', 161]) 
+data['giurgiu'].extend(['bucharest', 86, 77]) 
+data['hirsova'].extend(['urziceni', 98, 'eforie', 86, 151]) 
+data['iasi'].extend(['vaslui', 92, 'neamt', 87, 226]) 
+data['lugoj'].extend(['timisoara', 111, 'mehadia', 70, 244]) 
+data['mehadia'].extend(['lugoj', 70, 'dobreta', 75, 241]) 
+data['neamt'].extend(['iasi', 87, 234]) 
+data['oradea'].extend(['zerind', 71, 'sibiu', 151, 380]) 
+data['pitesti'].extend(['rimimicu vilcea', 97, 'craiova', 138, 'bucharest', 101, 10]) 
+data['Rimimicu Vilcea'].extend(['craiova', 146, 'sibiu', 80, 'pitesti', 97, 193]) 
+data['timisoara'].extend(['arad', 118, 'lugoj', 111, 329]) 
+data['urziceni'].extend(['bucharest', 85, 'vaslui', 142, 'hirsova', 98, 80]) 
+data['vaslui'].extend(['urziceni', 142, 'iasi', 92, 199]) 
+data['zerind'].extend(['arad', 75, 'oradea', 71, 374]) 
+data['bucharest'].extend(['fagaras', 211, 'pitesti', 101, 'giurgiu', 90, 'urziceni', 85, 0]) 
 
-    while not open_set.empty():
-        current_node = open_set.get()[1]
 
-        print(f'Duyệt: {current_node}, Tọa độ: {actual_costs[current_node] + heuristic_costs[current_node]}')
-
-        if current_node == goal:
-            return "Tìm kiếm thành công"
-
-        closed_set.add(current_node)
-
-        for neighbor in get_neighbors(current_node):
-            new_cost = actual_costs[current_node] + 1  # Assuming cost from one node to its neighbor is 1
-
-            if neighbor not in closed_set:
-                open_set.put((new_cost + heuristic_costs[neighbor], neighbor, new_cost))
-                closed_set.add(neighbor)
-
-    return "Tim kiem that bai"
-
-def get_neighbors(node):
+class note:
     
-     # Example: Return neighbors of a node (assuming nodes are cities)
-     # You need to customize this based on your problem
+#hàm khởi tạo
+    def __init__(self, name, par = None, g = 0, h = 0): 
+        self.name = name
+        self.par = par
+        self.g = g
+        self.h = h
 
-    neighbors = {
-        'Arad': ['Sibiu', 'Timisoara', 'Zerind'],
-        'Sibiu': ['Arad', 'Fagaras', 'Oradea', 'Rimimicu Vilcea'],
-        'Fagaras': ['Sibiu', 'Bucharest'],
-        'Craiova': ['Dobreta', 'Rimimicu Vilcea', 'Pitesti'],
-        'Dobreta': ['Mehadia', 'Craiova'],
-        'Eforie': ['Hirsova'],
-        'Giurgiu': ['Bucharest'],
-        'Hirsova': ['Urziceni', 'Eforie'],
-        'Iasi': ['Vaslui', 'Neamt'],
-        'Lugoj': ['Timisoara', 'Mehadia'],
-        'Mehadia': ['Lugoj', 'Dobreta'],
-        'Neamt': ['Iasi'],
-        'Oradea': ['Zerind', 'Sibiu'],
-        'Pitesti': ['Rimimicu Vilcea', 'Craiova', 'Bucharest'],
-        'Rimimicu Vilcea': ['Craiova', 'Sibiu', 'Pitesti'],
-        'Timisoara': ['Arad', 'Lugoj'],
-        'Urziceni': ['Bucharest', 'Vaslui', 'Hirsova'],
-        'Vaslui': ['Urziceni', 'Iasi'],
-        'Zerind': ['Arad', 'Oradea'],
-        'Bucharest' : ['Fagaras', 'Pitesti', 'Giurgiu', 'Urziceni'],
-    }
-    return neighbors[node]
+#hàm hiển thị
+    def display(self): 
+        print(self.name, self.g, self.h)
 
-# Ước lượng chi phí từ Arad đến Bucharest (heuristic)
-heuristic_costs = {
-    # ... add distances for other cities ...
-    
-    'Arad': 366,
-    'Bucharest': 0,
-    'Craiova': 160,
-    'Dobreta': 242,
-    'Eforie': 161,
-    'Fagaras': 176,
-    'Giurgiu': 77,
-    'Hirsova': 151,
-    'Iasi': 226,
-    'Lugoj': 244,
-    'Mehadia': 241,
-    'Neamt': 234,
-    'Oradea': 380,
-    'Pitesti': 10,
-    'Rimimicu Vilcea': 193,
-    'Sibiu': 253,
-    'Timisoara': 329,
-    'Urziceni': 80,
-    'Vaslui': 199,
-    'Zerind': 374,
-}
+#hàm so sánh, so sánh các nút với nhau.
+    def __lt__(self, other):  
+        if other is None:
+            return False
+        return self.g + self.h < other.g + other.h #duyệt nút có chi phí nhỏ nhất.
 
-# Chi phí thực tế từ Arad đến các điểm khác (actual cost)
-actual_costs = {
-    # ... add distances for other cities ...
-    'Arad': 0,
-    'Sibiu': 140,
-    'Timisoara': 118,
-    'Zerind': 75,
-    'Oradea': 146,
-    'Fagaras': 239,
-    'Rimimicu Vilcea': 220,
-    'Pitesti': 317,
-    'Craiova': 292,
-    'Bucharest': 418,
-    'Giurgiu': 90,
-    'Urziceni': 414,
-    'Hirsova': 151,
-    'Eforie': 161,
-    'Vaslui': 509,
-    'Iasi': 406,
-    'Neamt': 563,
-    'Lugoj': 229,
-    'Mehadia': 299,
-    'Dobreta': 242,
-}
+#hàm kiểm tra xem đỉnh hiện tại có phải là đỉnh đích không.
+def equal(O, G): #so sánh hai đỉnh O và G. Nếu tên của hai đỉnh này giống nhau, thì được coi là bằng nhau và hàm trả về True, ngược lại trả về False.
+    if O.name == G.name:
+        return True
+    return False
 
-start_node = 'Arad'
-goal_node = 'Bucharest'
-result = a_star_search(start_node, goal_node, heuristic_costs, actual_costs)
-print(result)
+#hàm kiểm tra xem một đỉnh nào đó đã tồn tại trong hàng đợi ưu tiên hay chưa.
+def checkInPriority(tmp, c):
+    if tmp is None:
+        return False
+    return tmp in c.queue
+
+start = input("Nhập điểm bắt đầu: ")
+goal = input("Nhập điểm đích: ")
+
+S = note(name = start)
+G = note(name = goal)
+
+def AStar(S, G):
+    Open = PriorityQueue()
+    Closed = PriorityQueue()
+    S.h = data[S.name][-1]
+    Open.put(S)
+    while True:
+        if Open.empty():
+            print('tìm kiếm thất bại')
+            return
+        O = Open.get()
+        Closed.put(O)
+        print('duyệt:', O.name, O.g, O.h)
+        if equal(O, G):
+            print('tìm kiếm thành công')
+            return
+
+        i = 0
+        while i < len(data[O.name]):
+            # kiểm tra danh sách có phần tử không
+            if data[O.name]:  
+                name = data[O.name][i]
+                if data[name]:  
+                    g =  O.g + data[O.name][i + 1]
+                    h = data[name][-1]
+
+                    tmp = note(name = name, g = g,  h = h)
+                    tmp.par = O
+
+                    ok1 = checkInPriority(tmp, Open)
+                    ok2 = checkInPriority(tmp, Closed)
+
+                    if not ok1 and not ok2:
+                        Open.put(tmp)
+
+                i += 2
+            else:
+                print(f"Danh sách data['{O.name}'] rỗng.")
+                return
+
+AStar(S, G)
